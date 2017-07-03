@@ -24,7 +24,7 @@ namespace SendFolderContents
                             s.ConstructUsing(name => new Worker()); //3
                             s.WhenStarted(tc =>
                             {
-                                Log.Logger.Information("Starting service.");
+                                Log.Logger.Information("Starting service:" + ConfigurationManager.AppSettings["Revision"]);
                                 tc.Start();
                                 Log.Logger.Information("Service started.");
                             }); //4
