@@ -64,7 +64,7 @@ namespace SendFolderContents
                     });
                     x.RunAsLocalSystem(); //6
 
-                    x.SetDescription("Flytter fotos fra feks dropbox til NAS"); //7
+                    x.SetDescription("Sender liste over filer, feks fotos fra en NAS-folder"); //7
                     x.SetDisplayName("AJF.SendFolderContents"); //8
                     x.SetServiceName("AJF.SendFolderContents"); //9
                 }); //10        }
