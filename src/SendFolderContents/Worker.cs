@@ -78,7 +78,7 @@ namespace SendFolderContents
                 //{
                 //    if (new DateTime(2017, 7, 3, 22, 36, 0) < DateTime.Now)
                 //    {
-                if (DateTime.Now.Subtract(lastSend) > TimeSpan.FromSeconds(23))
+                if (DateTime.Now.Subtract(lastSend) > TimeSpan.FromMinutes(5))
                 {
                     //SendMail(@"\\juulnas\qmultimedia\photos\2017\", "andersjuulsfirma@gmail.com").Wait();
                     SendMail(@"\\juulnas\qmultimedia\photos.Tine\2017\", "andersjuulsfirma@gmail.com").Wait();
