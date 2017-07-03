@@ -74,25 +74,24 @@ namespace SendFolderContents
 
                 Thread.Sleep(1 * 1000);
 
-                //if (DateTime.Now < new DateTime(2017, 7, 3, 22, 37,0))
-                //{
-                //    if (new DateTime(2017, 7, 3, 22, 36, 0) < DateTime.Now)
-                //    {
-                if (DateTime.Now.Subtract(lastSend) > TimeSpan.FromMinutes(5))
+                if (DateTime.Now.Minute == 0)
                 {
-                    //SendMail(@"\\juulnas\qmultimedia\photos\2017\", "andersjuulsfirma@gmail.com").Wait();
-                    SendMail(@"\\juulnas\qmultimedia\photos.Tine\2017\", "andersjuulsfirma@gmail.com").Wait();
-                    lastSend = DateTime.Now;
+                    if (new DateTime(2017, 7, 3, 22, 36, 0) < DateTime.Now)
+                    {
+                        if (DateTime.Now.Subtract(lastSend) > TimeSpan.FromMinutes(5))
+                        {
+                            //SendMail(@"\\juulnas\qmultimedia\photos\2017\", "andersjuulsfirma@gmail.com").Wait();
+                            SendMail(@"\\juulnas\qmultimedia\photos.Tine\2017\", "andersjuulsfirma@gmail.com").Wait();
+                            lastSend = DateTime.Now;
+                        }
+                    }
                 }
-                //    }
-
-                //}
             }
         }
 
         private async Task SendMail(string path, string email)
         {
-            var folderContents = GetFolderContents(path).OrderBy(x=>x);
+            var folderContents = GetFolderContents(path).OrderBy(x => x);
 
 
             var fromMailAddress = new MailAddress("andersjuulsfirma@gmail.com");
