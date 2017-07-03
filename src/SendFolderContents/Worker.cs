@@ -76,9 +76,9 @@ namespace SendFolderContents
 
                 if (DateTime.Now.Minute == 0)
                 {
-                    if (new DateTime(2017, 7, 3, 22, 36, 0) < DateTime.Now)
+                    if (DateTime.Now.Hour == 0)
                     {
-                        if (DateTime.Now.Subtract(lastSend) > TimeSpan.FromMinutes(5))
+                        if (DateTime.Now.Subtract(lastSend) > TimeSpan.FromMinutes(20))
                         {
                             //SendMail(@"\\juulnas\qmultimedia\photos\2017\", "andersjuulsfirma@gmail.com").Wait();
                             SendMail(@"\\juulnas\qmultimedia\photos.Tine\2017\", "andersjuulsfirma@gmail.com").Wait();
@@ -91,7 +91,7 @@ namespace SendFolderContents
 
         private async Task SendMail(string path, string email)
         {
-            var folderContents = GetFolderContents(path).OrderBy(x => x);
+            var folderContents = GetFolderContents(path).OrderByDescending(x => x);
 
 
             var fromMailAddress = new MailAddress("andersjuulsfirma@gmail.com");
@@ -100,7 +100,7 @@ namespace SendFolderContents
             var transport = new Web(networkCredential);
 
 
-            var subjectLine = "Filer paa JuulNas";
+            var subjectLine = "Filer paa JuulNas, " + path;
 
             // Create the email object first, then add the properties.
             var myMessage = new SendGridMessage {From = fromMailAddress};
