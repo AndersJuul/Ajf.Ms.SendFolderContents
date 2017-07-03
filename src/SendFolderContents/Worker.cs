@@ -100,7 +100,7 @@ namespace SendFolderContents
             var transport = new Web(networkCredential);
 
 
-            var subjectLine = "Filer på JuulNas";
+            var subjectLine = "Filer paa JuulNas";
 
             // Create the email object first, then add the properties.
             var myMessage = new SendGridMessage {From = fromMailAddress};
