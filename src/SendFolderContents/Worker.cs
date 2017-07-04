@@ -139,7 +139,7 @@ namespace SendFolderContents
             {
                 result.AddRange(GetFolderContents(dir));
             }
-
+            result.Insert(0, "--- Filer:" + result.Count);
             return result;
         }
 
