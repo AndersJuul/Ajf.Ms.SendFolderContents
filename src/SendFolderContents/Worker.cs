@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -63,6 +64,10 @@ namespace SendFolderContents
 
             var lastSend = DateTime.MinValue;
 
+            var desiredHours = ConfigurationManager.AppSettings["Hours"].Split(',').Select(x => Convert.ToInt32(x)).ToArray();
+            var desiredMinutes = ConfigurationManager.AppSettings["Minutes"].Split(',').Select(x => Convert.ToInt32(x)).ToArray();
+            var minSleep = Convert.ToInt32(ConfigurationManager.AppSettings["MinSleep"]);
+
             while (true)
             {
                 var backgroundWorker = sender as BackgroundWorker;
@@ -74,11 +79,11 @@ namespace SendFolderContents
 
                 Thread.Sleep(1 * 1000);
 
-                if (DateTime.Now.Minute == 0)
+                if (desiredMinutes.Contains (DateTime.Now.Minute) )
                 {
-                    if (DateTime.Now.Hour == 0)
+                    if (desiredHours.Contains( DateTime.Now.Hour))
                     {
-                        if (DateTime.Now.Subtract(lastSend) > TimeSpan.FromMinutes(20))
+                        if (DateTime.Now.Subtract(lastSend) > TimeSpan.FromMinutes(minSleep))
                         {
                             //SendMail(@"\\juulnas\qmultimedia\photos\2017\", "andersjuulsfirma@gmail.com").Wait();
                             SendMail(@"\\juulnas\qmultimedia\photos.Tine\2017\", "andersjuulsfirma@gmail.com").Wait();
