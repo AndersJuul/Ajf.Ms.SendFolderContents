@@ -9,22 +9,25 @@ namespace SendFolderContents
     {
         private static void Main(string[] args)
         {
+
             Log.Logger = new LoggerConfiguration()
                 .WriteTo.RollingFile(ConfigurationManager.AppSettings["RollingFile"])
                 .CreateLogger();
 
             try
             {
+                var appSettings = new AppSettings();
+
                 HostFactory.Run(x => //1
                 {
                     x.Service<Worker>(s => //2
                     {
                         try
                         {
-                            s.ConstructUsing(name => new Worker()); //3
+                            s.ConstructUsing(name => new Worker(appSettings)); //3
                             s.WhenStarted(tc =>
                             {
-                                Log.Logger.Information("Starting service:" + ConfigurationManager.AppSettings["Revision"]);
+                                Log.Logger.Information("Starting service:" + appSettings.Revision);
                                 tc.Start();
                                 Log.Logger.Information("Service started.");
                             }); //4
@@ -64,7 +67,7 @@ namespace SendFolderContents
                     });
                     x.RunAsLocalSystem(); //6
 
-                    x.SetDescription("Sender liste over filer, feks fotos fra en NAS-folder"); //7
+                    x.SetDescription(appSettings.Description); //7
                     x.SetDisplayName("AJF.SendFolderContents"); //8
                     x.SetServiceName("AJF.SendFolderContents"); //9
                 }); //10        }

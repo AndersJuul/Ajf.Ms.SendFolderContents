@@ -16,7 +16,14 @@ namespace SendFolderContents
 {
     public class Worker
     {
+        private readonly IAppSettings _appSettings;
         private BackgroundWorker _backgroundWorker;
+
+        public Worker(IAppSettings appSettings)
+        {
+            _appSettings = appSettings;
+        }
+
         public bool WorkDone { get; set; }
 
         public void Start()
@@ -63,11 +70,7 @@ namespace SendFolderContents
             WorkDone = false;
 
             var lastSend = DateTime.MinValue;
-
-            var desiredHours = ConfigurationManager.AppSettings["Hours"].Split(',').Select(x => Convert.ToInt32(x)).ToArray();
-            var desiredMinutes = ConfigurationManager.AppSettings["Minutes"].Split(',').Select(x => Convert.ToInt32(x)).ToArray();
-            var minSleep = Convert.ToInt32(ConfigurationManager.AppSettings["MinSleep"]);
-
+            
             while (true)
             {
                 var backgroundWorker = sender as BackgroundWorker;
@@ -79,14 +82,16 @@ namespace SendFolderContents
 
                 Thread.Sleep(1 * 1000);
 
-                if (desiredMinutes.Contains (DateTime.Now.Minute) )
+                if (_appSettings.Minutes.Contains (DateTime.Now.Minute) )
                 {
-                    if (desiredHours.Contains( DateTime.Now.Hour))
+                    if (_appSettings.Hours.Contains( DateTime.Now.Hour))
                     {
-                        if (DateTime.Now.Subtract(lastSend) > TimeSpan.FromMinutes(minSleep))
+                        if (DateTime.Now.Subtract(lastSend) > _appSettings.MinSleep)
                         {
-                            //SendMail(@"\\juulnas\qmultimedia\photos\2017\", "andersjuulsfirma@gmail.com").Wait();
-                            SendMail(@"\\juulnas\qmultimedia\photos.Tine\2017\", "andersjuulsfirma@gmail.com").Wait();
+                            foreach (var job in _appSettings.Jobs)
+                            {
+                                SendMail(job.Path, job.Receiver).Wait();
+                            }
                             lastSend = DateTime.Now;
                         }
                     }
