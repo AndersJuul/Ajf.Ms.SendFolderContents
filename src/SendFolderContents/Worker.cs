@@ -96,7 +96,9 @@ namespace SendFolderContents
 
         private async Task SendMail(string path, string email)
         {
-            var folderContents = GetFolderContents(path).OrderByDescending(x => x);
+            var folderContents = GetFolderContents(path,path).ToArray();
+            
+
 
 
             var fromMailAddress = new MailAddress("andersjuulsfirma@gmail.com");
@@ -116,7 +118,10 @@ namespace SendFolderContents
             var bytes = Encoding.Default.GetBytes(subjectLine);
             myMessage.Subject = Encoding.UTF8.GetString(bytes);
 
-            var html = "Filer:<BR/>";
+            var html = $"Filer i {path}:<BR/>";
+            html += "--<BR/>";
+            html += $"Ialt : {folderContents.Count()}<BR/>";
+            html += "--<BR/>";
             foreach (var line in folderContents)
             {
                 html += line + "<BR/>";
@@ -127,19 +132,18 @@ namespace SendFolderContents
             await transport.DeliverAsync(myMessage);
         }
 
-        private IEnumerable<string> GetFolderContents(string path)
+        private IEnumerable<string> GetFolderContents(string path, string originalPath)
         {
             var result = new List<string>();
-            foreach (var file in Directory.GetFiles(path))
+            foreach (var file in Directory.GetFiles(path).OrderByDescending(x=>x))
             {
-                result.Add(file);
+                result.Add(file.Replace(originalPath,""));
             }
 
-            foreach (var dir in Directory.GetDirectories(path))
+            foreach (var dir in Directory.GetDirectories(path).OrderByDescending(x => x))
             {
-                result.AddRange(GetFolderContents(dir));
+                result.AddRange(GetFolderContents(dir, originalPath));
             }
-            result.Insert(0, "--- Filer:" + result.Count);
             return result;
         }
 
