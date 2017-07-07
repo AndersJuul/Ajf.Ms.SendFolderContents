@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Configuration;
 using Ajf.Nuget.Logging;
 using Serilog;
-using Serilog.Sinks.Elasticsearch;
 using Topshelf;
 
 namespace SendFolderContents
@@ -11,7 +9,7 @@ namespace SendFolderContents
     {
         private static void Main(string[] args)
         {
-            Log.Logger = StandardLoggerProvider.GetLogger();
+            StandardLoggerConfigurator.SetLogger();
 
             try
             {
@@ -54,9 +52,6 @@ namespace SendFolderContents
                                 Log.Logger.Information("Session changed: " + w);
                                 Log.Logger.Information("Session changed: " + sca);
                             });
-
-
-
                         }
                         catch (Exception ex)
                         {
