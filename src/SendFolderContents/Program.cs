@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using Ajf.Nuget.Logging;
 using Serilog;
 using Serilog.Sinks.Elasticsearch;
 using Topshelf;
@@ -10,10 +11,7 @@ namespace SendFolderContents
     {
         private static void Main(string[] args)
         {
-            Log.Logger = new LoggerConfiguration()
-                .WriteTo.RollingFile(ConfigurationManager.AppSettings["RollingFile"])
-                .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri("http://ajf-elastic-01:9200")))
-                .CreateLogger();
+            Log.Logger = StandardLoggerProvider.GetLogger();
 
             try
             {
