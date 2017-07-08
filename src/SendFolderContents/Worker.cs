@@ -87,6 +87,7 @@ namespace SendFolderContents
                     {
                         if (DateTime.Now.Subtract(lastSend) > _appSettings.MinSleep)
                         {
+                            Log.Information("AppSettings match up with current time. Sending. {appSettings}", _appSettings);
                             foreach (var job in _appSettings.Jobs)
                             {
                                 SendMail(job.Path, job.Receiver).Wait();
