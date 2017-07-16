@@ -24,7 +24,7 @@ namespace SendFolderContents
                             s.ConstructUsing(name => new Worker(appSettings)); //3
                             s.WhenStarted(tc =>
                             {
-                                Log.Logger.Information("Starting service:" + appSettings.Revision);
+                                Log.Logger.Information("Starting service:");
                                 tc.Start();
                                 Log.Logger.Information("Service started.");
                             }); //4
@@ -62,8 +62,8 @@ namespace SendFolderContents
                     x.RunAsLocalSystem(); //6
 
                     x.SetDescription(appSettings.Description); //7
-                    x.SetDisplayName("AJF.SendFolderContents"); //8
-                    x.SetServiceName("AJF.SendFolderContents"); //9
+                    x.SetDisplayName(appSettings.DisplayName); //8
+                    x.SetServiceName(appSettings.ServiceName); //9
                 }); //10        }
             }
             catch (Exception ex)
