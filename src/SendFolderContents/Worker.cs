@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -134,7 +135,11 @@ namespace SendFolderContents
             myMessage.Html = html;
 
             // Send the email.
-            await transport.DeliverAsync(myMessage);
+            Log.Logger.Information("Should send: {@email}, {@subject}, {@body}",email,subjectLine,html);
+            if (ConfigurationManager.AppSettings["PerformActualSend"] == "1")
+            {
+                await transport.DeliverAsync(myMessage);
+            }
         }
 
         private IEnumerable<string> GetFolderContents(string path, string originalPath)
